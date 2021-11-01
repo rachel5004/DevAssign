@@ -31,9 +31,9 @@ def getShortCut():
             url = request.form.get('url')
     # check if shortcut already exist
     object = Url.query.filter(Url.original==url).all()
-    if object: return object[0].shortcut
+    if object: return {'shortcut':object[0].shortcut}
     else: shortcut = Generate(url)
-    return shortcut
+    return {'shortcut':shortcut}
 
 
 def base62(index):
@@ -45,7 +45,7 @@ def base62(index):
              'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
              'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
     while index % 62 > 0 or result == "": # index가 62인 경우에도 적용되기 위해 do-while 형식이 되도록 구현했다.
-        result = result + words[index % 62]
+        result += words[index % 62]
         index = int(index / 62)
     return result
 

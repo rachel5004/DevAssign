@@ -46,14 +46,19 @@
         result = document.querySelector('input[name="result_url"]')
 
         send_url = "http://localhost:5000/url?url=" + user_input;
-        fetch(send_url)
+        const config = {
+            headers: {
+                'Accept': 'application/json'
+            }
+        }
+        fetch(send_url,config)
         .then(function(response) {
             return response.json();
         })
         .then(function(json) {
             domain= window.location.href;
             result_url_shortener.classList.replace('noneDisplay','display');
-            result.value=domain+json;
+            result.value=domain+json['shortcut'];
         })
     }
     function copy_shortcut() {
