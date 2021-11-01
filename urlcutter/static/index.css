@@ -1,0 +1,35 @@
+html,
+body {
+    background-color: #fff;
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 3rem !important;
+}
+
+.url_shortener,
+.result_url_shortener {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.url_shortener div,
+.result_url_shortener div {
+    width: 30%;
+    height: 100%;
+}
+
+.display {
+    display: flex;
+}
+
+.noneDisplay {
+    display: none;
+}
