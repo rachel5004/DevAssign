@@ -67,7 +67,7 @@ export FLASK_APP=urlcutter/__init__.py; export FLASK_ENV=development; flask run
 
 <br/>
 
-## ❓ About shortcut generater
+## ❓ About shortcut generator
 ### Base62 vs. Base64
 base64를 사용하면 더 짧은 길이로 축소가능하지만, base64는 '+', '=', '/'와 같은 문자들이 포함되어 URL SAFE하지가 않습니다.
 때문에 base62로 인코딩했습니다.
