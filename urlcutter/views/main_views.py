@@ -4,6 +4,7 @@ from datetime import datetime
 from urlcutter import db,api
 from urlcutter.models import Url
 import log
+from secrets import token_urlsafe
 
 bp = Blueprint('main',__name__, url_prefix="/")
 
@@ -54,9 +55,13 @@ def Generate(URL):
     url = Url(original=URL,create_date=datetime.now())
     db.session.add(url)
     db.session.commit()
-    index = url.id
+
     # URL이 등록 된 Index를 Base62로 인코딩하여 shortcut 생성
-    shortURL = base62(index)
+    index = url.id
+    # shortURL = base62(index)
+    # or with secrets
+    shortURL = token_urlsafe(6)
+
     # 생성된 shortcut 정보 DB에 갱신
     url.shortcut=shortURL
     db.session.commit()
