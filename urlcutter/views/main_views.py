@@ -1,26 +1,40 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template,abort, request, Response,redirect
+from flask_restful import Resource, reqparse
+from datetime import datetime
+from urlcutter import db,api
 from urlcutter.models import Url
+import log
 
 bp = Blueprint('main',__name__, url_prefix="/")
-
-@bp.route('/hello')
-def hello():
-    return 'Hello, world!'
-
 
 @bp.route('/')
 def index():
     return render_template("index.html")
 
-@bp.route('/url')
-def getShortCut(url):
-    # check if shortcut already exist
-    data = DB.select('encoded', url.data)
-    # generate shortcut
-    shortcut = Url.query.get_or_
-    # Insert DB
+@bp.route('/<shortcut>')
+def redirectShortcut(shortcut):
+    log.log(request,"redirect shortcut")
+    data = Url.query.filter(Url.shortcut==shortcut).all()
+    if data: return redirect(data[0].original, code=302)
+    else: abort(404)
 
+@bp.route('/url',methods=['GET', 'POST'])
+def getShortCut():
+    url=''
+    # fetch default method=GET
+    if request.method == 'GET': url=request.args.get('url')
+    elif request.method == 'POST':
+        if request.content_type == 'application/json':
+            data = request.get_json()
+            url=data['url']
+        elif request.content_type.startswith('multipart/form-data'):
+            url = request.form.get('url')
+    # check if shortcut already exist
+    object = Url.query.filter(Url.original==url).all()
+    if object: return object[0].shortcut
+    else: shortcut = Generate(url)
     return shortcut
+
 
 def base62(index):
     result = ""
@@ -36,11 +50,38 @@ def base62(index):
     return result
 
 def Generate(URL):
-    # DB에 URL Insert
-    index = DB.insert(URL)
-    # URL이 등록 된 Index를 Base62로 인코딩
+    # DB에 원본 URL Insert
+    url = Url(original=URL,create_date=datetime.now())
+    db.session.add(url)
+    db.session.commit()
+    index = url.id
+    # URL이 등록 된 Index를 Base62로 인코딩하여 shortcut 생성
     shortURL = base62(index)
-    # 인코딩 된 정보 DB에 갱신
-    DB.update(index, shortURL)
+    # 생성된 shortcut 정보 DB에 갱신
+    url.shortcut=shortURL
+    db.session.commit()
     return shortURL
 
+# class urlRestApi(Resource):
+#     def get(self):
+#         shortcut=""
+#         data = Url.query.filter(Url.shortcut == shortcut).all()
+#         if data: return Response(302, data[0].original)
+#         else: return Response(404)
+#     def post(self):
+#         try:
+#             parser = reqparse.RequestParser()
+#             parser.add_argument('url', type=str)
+#             args = parser.parse_args()
+#             url = args['url']
+#             # check if shortcut already exist
+#             object = Url.query.filter(Url.original == url).all()
+#             if object:
+#                 return object[0].shortcut
+#             else:
+#                 shortcut = Generate(url)
+#                 return shortcut
+#         except Exception as e:
+#             log.error_log(e)
+#
+# api.add_resource(urlRestApi, '/')
