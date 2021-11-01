@@ -67,10 +67,14 @@ export FLASK_APP=urlcutter/__init__.py; export FLASK_ENV=development; flask run
 
 <br/>
 
-## ❓ About shortcut generater
+## ❓ About shortcut generator
 ### Base62 vs. Base64
 base64를 사용하면 더 짧은 길이로 축소가능하지만, base64는 '+', '=', '/'와 같은 문자들이 포함되어 URL SAFE하지가 않습니다.
 때문에 base62로 인코딩했습니다.
 
 ### 원본URL vs. id
 원본 url을 그대로 인코딩하면 결과값이 길어지게 되므로, DB에 저장 후 생성된 id값을 기반으로 단축URL을 생성했습니다.
+
+### 혹은 secrets.token_urlsafe
+secrets 모듈의 token_urlsafe 함수를 이용하면 base64 인코딩 기반의 URL SAFE한 무작위 텍스트 문자열을 돌려줍니다.
+위 함수를 사용해 단축URL을 생성하는 방법도 적용할 수 있습니다.
