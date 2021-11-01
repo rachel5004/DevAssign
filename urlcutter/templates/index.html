@@ -25,7 +25,9 @@
                 <button class="btn btn-outline-primary" type="button" onclick="send_request()">submit</button>
             </div>
         </section>
-
+        <div style="height:25px"></div>
+        <div style="text-align:center" class="label noneDisplay">⬇️ Shorten URL ⬇️</div>
+        <div style="height:25px"></div>
         <section class="result_url_shortener noneDisplay">
             <div class="input-group flex-nowrap">
                 <input type="text" name="result_url" class="form-control" aria-label="url" aria-describedby="addon-wrapping" value="" readonly>
@@ -44,6 +46,7 @@
         result_url_shortener = document.querySelector('.result_url_shortener');
         user_input = document.querySelector('input[name="url"]').value;
         result = document.querySelector('input[name="result_url"]')
+        shortcut_label = document.querySelector('.label');
 
         send_url = "http://localhost:5000/url?url=" + user_input;
         const config = {
@@ -58,6 +61,7 @@
         .then(function(json) {
             domain= window.location.href;
             result_url_shortener.classList.replace('noneDisplay','display');
+            shortcut_label.style.display='block';
             result.value=domain+json['shortcut'];
         })
     }
