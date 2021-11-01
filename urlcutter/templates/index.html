@@ -29,6 +29,7 @@
         <section class="result_url_shortener noneDisplay">
             <div class="input-group flex-nowrap">
                 <input type="text" name="result_url" class="form-control" aria-label="url" aria-describedby="addon-wrapping" value="" readonly>
+                <button class="btn btn-outline-danger" type="button" onclick="copy_shortcut()"> &nbsp;copy &nbsp;</button>
             </div>
         </section>
 
@@ -45,8 +46,6 @@
         result = document.querySelector('input[name="result_url"]')
 
         send_url = "http://localhost:5000/url?url=" + user_input;
-<!--        url_shortener.classList.remove('display');-->
-<!--        url_shortener.classList.add('noneDisplay');-->
         fetch(send_url)
         .then(function(response) {
             return response.json();
@@ -56,5 +55,9 @@
             result_url_shortener.classList.replace('noneDisplay','display');
             result.value=domain+json;
         })
+    }
+    function copy_shortcut() {
+        result = document.querySelector('input[name="result_url"]')
+        navigator.clipboard.writeText(result.value);
     }
 </script>
