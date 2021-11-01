@@ -16,6 +16,11 @@ cd <project>
 # install libs
 pip install -r requirements.txt
 
+# DB setting
+flask db init
+flask db migrate
+flask db upgrade
+
 # start app
 export FLASK_APP=urlcutter/__init__.py; export FLASK_ENV=development; flask run
 ```
