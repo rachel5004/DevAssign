@@ -31,7 +31,7 @@ export FLASK_APP=urlcutter/__init__.py; export FLASK_ENV=development; flask run
 <br/>
 
 ## 📝 API
-### 단축url 생성
+### 단축url 생성 (Query String)
 
 | method | uri |
 |---|---|
