@@ -52,8 +52,9 @@
             return response.json();
         })
         .then(function(json) {
+            domain= window.location.href;
             result_url_shortener.classList.replace('noneDisplay','display');
-            result.value=json;
+            result.value=domain+json;
         })
     }
 </script>
